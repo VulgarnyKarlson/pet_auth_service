@@ -13,8 +13,9 @@ Users can create, edit, search, view, and delete notes. Notes can be categorized
 ### Installation
 ```bash
 yarn install
+yarn prisma generate
 pre-commit install
 ```
 
 ## License
-This project is licensed under the terms of the MIT [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode) license.
+This project is licensed under the terms of the [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode) license.
