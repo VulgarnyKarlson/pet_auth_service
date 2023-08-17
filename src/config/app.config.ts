@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import * as process from 'process';
 
-dotenv.config({ path: '.env' })
+dotenv.config({ path: '.default.env' })
 
 export class AppConfig {
 
@@ -15,5 +15,5 @@ export class AppConfig {
         refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
     }
 
-    public static readonly DATABASE_URL = process.env.DATABASE_URL
+    public static readonly DATABASE_URL = `postgres://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}?schema=public`
 }

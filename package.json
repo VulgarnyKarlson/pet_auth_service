@@ -5,6 +5,9 @@
   "version": "0.1.0",
   "scripts": {
     "build": "yarn clean && tsc --project tsconfig.build.json",
+    "prisma:generate": "DATABASE_URL=$(node -p \"require('./dbConfig')\") prisma generate",
+    "prisma:push": "DATABASE_URL=$(node -p \"require('./dbConfig')\") prisma db push",
+    "prisma:migrate": "DATABASE_URL=$(node -p \"require('./dbConfig')\") prisma migrate dev",
     "clean": "rimraf dist",
     "lint": "eslint \"./src/**\" --fix",
     "start:dev": "node -r ts-node/register -r  tsconfig-paths/register src/main.ts",
