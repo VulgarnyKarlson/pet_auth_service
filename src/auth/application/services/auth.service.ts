@@ -83,4 +83,14 @@ export class AuthService {
             refreshToken,
         };
     }
+
+    async validateAuthToken(token: string): Promise<JwtAuthPayload|null> {
+        try {
+            return await this.jwtService.verifyAsync(token, {
+                secret: AppConfig.JWT.authSecret,
+            });
+        } catch (e) {
+            return null;
+        }
+    }
 }

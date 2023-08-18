@@ -6,7 +6,8 @@ dotenv.config({ path: '.default.env' })
 export class AppConfig {
 
     public static readonly IS_PRODUCTION = process.env.NODE_ENV === 'production'
-    public static PORT = Number(process.env.PORT) || 3000
+    public static HTTP_PORT = Number(process.env.HTTP_PORT) || 3000
+    public static GRPC_PORT = Number(process.env.GRPC_PORT) || 5000
 
     public static JWT = {
         authSecret: process.env.JWT_AUTH_SECRET,
