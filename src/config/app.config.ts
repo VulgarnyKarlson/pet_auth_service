@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import * as process from 'process';
 
-dotenv.config({ path: '.default.env' })
+dotenv.config({ path: '.env.default' })
 
 export class AppConfig {
 
