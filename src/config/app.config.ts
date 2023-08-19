@@ -15,6 +15,11 @@ export class AppConfig {
         accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '7d',
         refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
     }
-
-    public static readonly DATABASE_URL = `postgres://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}?schema=public`
+    public static readonly DATABASE = {
+        host: process.env.DATABASE_HOST,
+        port: Number(process.env.DATABASE_PORT),
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME,
+    }
 }

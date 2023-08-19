@@ -5,7 +5,9 @@ import { AppConfig } from 'config/app.config';
 @Injectable()
 export class DatabaseService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
     constructor() {
-        const url = AppConfig.DATABASE_URL;
+        const url = 'postgres://' +
+            `${AppConfig.DATABASE.username}:${AppConfig.DATABASE.password}@` +
+            `${AppConfig.DATABASE.host}:${AppConfig.DATABASE.port}/${AppConfig.DATABASE.database}?schema=public`;
 
         super({
             datasources: {
