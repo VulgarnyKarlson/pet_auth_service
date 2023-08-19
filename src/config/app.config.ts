@@ -8,6 +8,7 @@ export class AppConfig {
     public static readonly IS_PRODUCTION = process.env.NODE_ENV === 'production'
     public static HTTP_PORT = Number(process.env.HTTP_PORT) || 3000
     public static GRPC_PORT = Number(process.env.GRPC_PORT) || 5000
+    public static HTTP_PREFIX = process.env.HTTP_PREFIX || 'api/v1/auth'
 
     public static JWT = {
         authSecret: process.env.JWT_AUTH_SECRET,

@@ -23,7 +23,7 @@ const bootstrap = async () => {
             loggerService.error(err.message + '\n' + err.stack, 'uncaughtException')
         }
     })
-    app.setGlobalPrefix('api/v1/auth');
+    app.setGlobalPrefix(AppConfig.HTTP_PREFIX);
     app.useGlobalPipes(new ValidationPipe({ transform: true, transformOptions: { enableImplicitConversion: true } }))
     await app.startAllMicroservices()
     await app.listen(AppConfig.HTTP_PORT)
