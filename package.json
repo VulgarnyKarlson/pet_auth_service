@@ -12,7 +12,7 @@
     "lint": "eslint \"./src/**\" --fix",
     "start:dev": "node -r ts-node/register -r  tsconfig-paths/register src/main.ts",
     "start:prod": "NODE_PATH=dist TS_NODE_PROJECT='tsconfig.run.json' node -r tsconfig-paths/register dist/main.js",
-    "test": "dotenv -e .env.test -- jest -i --no-cache -c jest.config.js",
+    "test": "dotenv -e .env.test -- jest -i --no-colors --collectCoverage --no-cache -c jest.config.js",
     "test:watch": "dotenv -e .env.test -- jest -i --watch -c jest.config.js",
     "test:cov": "dotenv -e .env.test -- jest -i --coverage -c jest.config.js",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",

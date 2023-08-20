@@ -25,13 +25,4 @@ export class DatabaseService extends PrismaClient implements OnModuleInit, OnMod
     async onModuleDestroy() {
         await this.$disconnect();
     }
-
-    async cleanDatabase() {
-        if (AppConfig.IS_PRODUCTION) {
-            return;
-        }
-
-
-        return Promise.all([ this.user.deleteMany() ]);
-    }
 }

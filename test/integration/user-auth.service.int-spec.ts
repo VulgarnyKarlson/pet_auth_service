@@ -1,8 +1,8 @@
-// test/auth.e2e-spec.ts
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from 'auth/application/services/auth.service';
 import { UserService } from 'auth/application/services/user.service';
+import { IUserRepository } from 'auth/domain/interfaces/user-repository.interface';
 import { DatabaseService } from 'auth/infrastructure/database/database.service';
 import { UserRepository } from 'auth/infrastructure/repository/user.repository';
 import { AppConfig } from 'config/app.config';
@@ -10,10 +10,10 @@ import { AppConfig } from 'config/app.config';
 describe('Auth Integration Tests', () => {
     let authService: AuthService;
     let userService: UserService;
-    let databaseService: DatabaseService;
+    let userRepo: IUserRepository;
 
     beforeAll(async () => {
-        const module: TestingModule = await Test.createTestingModule({
+        const moduleFixture: TestingModule = await Test.createTestingModule({
             providers: [
                 AuthService,
                 UserService,
@@ -28,20 +28,14 @@ describe('Auth Integration Tests', () => {
             ],
         }).compile();
 
-        authService = module.get<AuthService>(AuthService);
-        userService = module.get<UserService>(UserService);
-        databaseService = module.get<DatabaseService>(DatabaseService);
+        authService = moduleFixture.get<AuthService>(AuthService);
+        userService = moduleFixture.get<UserService>(UserService);
+        userRepo = moduleFixture.get<IUserRepository>(UserRepository);
 
-        // Connect to the database
-        await databaseService.$connect();
     });
 
     afterAll(async () => {
-        // Clean the database after all tests are done
-        await databaseService.cleanDatabase();
-
-        // Disconnect from the database
-        await databaseService.$disconnect();
+        await userRepo.cleanDatabase();
     });
 
     it('should sign up a new user', async () => {

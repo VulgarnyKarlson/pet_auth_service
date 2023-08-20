@@ -7,6 +7,7 @@ export interface IUserRepository {
     findById(id: string): Promise<User>
     update(where: UserWhereUniqueInput, data: Partial<User>): Promise<User>
     updateMany(where: UserWhereInput, data: Partial<User>): Promise<{ count: number }>
+    cleanDatabase(): Promise<void>
 }
 
 export interface UserWhereInput {

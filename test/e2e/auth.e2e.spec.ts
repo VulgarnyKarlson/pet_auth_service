@@ -1,15 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import supertest from 'supertest';
+import { IUserRepository } from 'auth/domain/interfaces/user-repository.interface';
+import { UserRepository } from 'auth/infrastructure/repository/user.repository';
 import { RegisterDto } from 'auth/application/dtos/register.dto';
 import { AuthService } from 'auth/application/services/auth.service';
 import { AppModule } from 'app.module';
-import { DatabaseService } from 'auth/infrastructure/database/database.service';
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;
     let authService: AuthService;
-    let dbService: DatabaseService;
+    let userRepo: IUserRepository;
     let httpClient: supertest.SuperTest<supertest.Test>;
 
     const testUser = {
@@ -26,17 +27,16 @@ describe('AuthController (e2e)', () => {
         }).compile();
 
         app = moduleFixture.createNestApplication();
-        dbService = moduleFixture.get<DatabaseService>(DatabaseService);
+        userRepo = moduleFixture.get<IUserRepository>(UserRepository);
         authService = moduleFixture.get<AuthService>(AuthService);
         await app.init();
 
-        await dbService.cleanDatabase();
+        await userRepo.cleanDatabase();
         httpClient = supertest(app.getHttpServer());
     });
 
     afterAll(async () => {
-        await dbService.cleanDatabase();
-        await dbService.$disconnect();
+        await userRepo.cleanDatabase();
         await app.close();
     });
 

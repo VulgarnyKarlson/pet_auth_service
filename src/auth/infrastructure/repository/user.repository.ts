@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from 'prisma/prisma-client/runtime/library';
+import { AppConfig } from 'config/app.config';
 import { CreateUserDto } from 'auth/application/dtos/create-user.dto';
 import {
     IUserRepository,
@@ -59,5 +60,13 @@ export class UserRepository implements IUserRepository {
             where,
             data,
         });
+    }
+
+    async cleanDatabase() {
+        if (AppConfig.IS_PRODUCTION) {
+            return;
+        }
+
+        await this.databaseService.user.deleteMany();
     }
 }

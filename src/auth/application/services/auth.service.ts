@@ -18,7 +18,7 @@ export class AuthService {
 
     async signup(dto: RegisterDto): Promise<Tokens> {
         const user = await this.userService.create(dto.email, dto.username, dto.password);
-        const tokens = await this.getTokens(user.id, user.email);
+        const tokens = await this.getTokens(user.id, user.username);
         await this.userService.updateRefreshToken(user.id, tokens.refreshToken);
 
         return tokens;
