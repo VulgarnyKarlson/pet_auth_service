@@ -1,6 +1,8 @@
 .idea
 dist
-.yarn
+.yarn/unplugged
+.yarn/cache
+.yarn/releases
 node_modules
 .prisma
 coverage
