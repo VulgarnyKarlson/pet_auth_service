@@ -25,6 +25,7 @@ const bootstrap = async () => {
     })
     app.setGlobalPrefix(AppConfig.HTTP_PREFIX);
     app.useGlobalPipes(new ValidationPipe({ transform: true, transformOptions: { enableImplicitConversion: true } }))
+    app.enableShutdownHooks()
     await app.startAllMicroservices()
     await app.listen(AppConfig.HTTP_PORT)
 }
