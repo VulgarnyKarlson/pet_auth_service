@@ -11,8 +11,10 @@ export class HealthService implements OnApplicationBootstrap, OnApplicationShutd
     }
 
     public async onApplicationShutdown(): Promise<void> {
-        await this.httpService.get('http://127.0.0.1/notready').toPromise();
-        console.log('Application shutdown');
+        if (AppConfig.IS_PRODUCTION) {
+            await this.httpService.get('http://127.0.0.1/notready').toPromise();
+            console.log('Application shutdown');
+        }
     }
 
     public async onApplicationBootstrap(): Promise<void> {

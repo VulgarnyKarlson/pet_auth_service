@@ -1,0 +1,41 @@
+variables:
+  CONTAINER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_SLUG
+  CONTAINER_IMAGE_FULL: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID
+
+stages:
+  - build
+  - deploy
+
+# BUILD STAGES
+Push into docker registry:
+  stage: build
+  image: docker:stable
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $CONTAINER_IMAGE || true
+    - docker build --cache-from $CONTAINER_IMAGE -t $CONTAINER_IMAGE .
+    - docker tag $CONTAINER_IMAGE $CONTAINER_IMAGE_FULL
+    - docker push $CONTAINER_IMAGE
+    - docker push $CONTAINER_IMAGE_FULL
+
+# DEPLOY STAGES
+# _TEMPLATES
+.prepare_for_deploy: &prepare_for_deploy
+  stage: deploy
+  image: registry.karlson.dev/individual/pet_gonote/infra:latest
+  variables:
+    ANSIBLE_HOST_KEY_CHECKING: "False"
+  before_script:
+    - apt update
+    - apt install openssh-client -y
+    - mkdir -p -m 700 $HOME/.ssh
+    - echo "$SSH_IDENTITY" | base64 -d > $HOME/.ssh/id_rsa
+    - chmod 600 $HOME/.ssh/id_rsa
+    - cd /root/ansible
+    - echo "$VAULT_PASS" > ./.vault_pass
+  when: manual
+
+deploy-dev:
+  <<: *prepare_for_deploy
+  script:
+    ansible-playbook -i static_inventory/servers --vault-password-file=.vault_pass app_authservice.yml -e run_hosts=dev -e tag_git=$CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID -t gonote,docker-app
