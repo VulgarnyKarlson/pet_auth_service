@@ -15,23 +15,23 @@ repos:
       - id: check-merge-conflict
   - repo: local
     hooks:
-      - id: yarn-build
-        name: yarn build
-        entry: bash -c 'yarn build'
+      - id: build
+        name: build
+        entry: bash -c 'make build'
         language: system
-      - id: yarn-clean
-        name: yarn clean
-        entry: bash -c 'rm -rf dist'
+      - id: clean
+        name: clean
+        entry: bash -c 'make clean'
         language: system
-      - id: yarn-lint
-        name: yarn lint
-        entry: yarn lint
+      - id: lint
+        name: lint
+        entry: make lint-fix
         language: system
         types: [ file ]
         files: \.(ts)$
-      - id: yarn-test
-        name: yarn test
-        entry: bash -c 'yarn test'
+      - id: test
+        name: test
+        entry: bash -c 'make test'
         language: system
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v8.0.0

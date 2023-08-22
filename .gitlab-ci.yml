@@ -4,6 +4,7 @@ variables:
 
 stages:
   - build
+  - test
   - deploy
 
 # BUILD STAGES
@@ -34,6 +35,37 @@ Push into docker registry:
     - cd /root/ansible
     - echo "$VAULT_PASS" > ./.vault_pass
   when: manual
+
+lint:
+  image:
+    name: $CONTAINER_IMAGE_FULL
+    entrypoint: [ "" ]
+  variables:
+    YARN_ENABLE_IMMUTABLE_INSTALLS: "false"
+  script:
+    - cd /app
+    - yarn set version berry
+    - yarn set version latest
+    - yarn install
+    - make lint-check
+
+test:
+  image:
+    name: $CONTAINER_IMAGE_FULL
+    entrypoint: [ "" ]
+  services:
+    - name: postgres:15.3
+      alias: postgres
+  variables:
+    POSTGRES_DB: auth_test
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: 1234
+    NODE_ENV: test
+    DATABASE_HOST: postgres
+  script:
+    - cd /app
+    - make prisma-push-test
+    - make test
 
 deploy-dev:
   <<: *prepare_for_deploy

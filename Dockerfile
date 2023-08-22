@@ -12,18 +12,13 @@ RUN yarn config set enableGlobalCache true
 RUN yarn config set globalFolder /home/.yarn
 
 WORKDIR /app
-COPY .yarnrc.yml package.json yarn.lock ./
-COPY .yarn/ ./.yarn
+COPY .yarnrc.yml package.json yarn.lock .yarn/ ./
 RUN yarn install
 
 COPY . ./
-RUN yarn build
-
-# Avoid running code as a root user
-RUN useradd -m myuser
-USER myuser
+RUN make build
 
 HEALTHCHECK --interval=15s --timeout=5s --start-period=30s \
 CMD node ./healthcheck/client.js
-CMD ["pm2-runtime", "ecosystem.config.js"]
+CMD ["make", "start-prod"]
 EXPOSE 3000 5000
