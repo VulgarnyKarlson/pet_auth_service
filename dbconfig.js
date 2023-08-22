@@ -1,4 +1,5 @@
-require('dotenv').config({ path: './.env.default' })
+const dotenvFileType = typeof process.env.NODE_ENV === "undefined" ? "default" : process.env.NODE_ENV;
+require('dotenv').config({ path: './.env.' + dotenvFileType });
 const username = process.env.DATABASE_USERNAME;
 const password = process.env.DATABASE_PASSWORD;
 const host = process.env.DATABASE_HOST;
