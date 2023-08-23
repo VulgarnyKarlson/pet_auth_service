@@ -51,16 +51,17 @@ describe('AuthGrpcController (e2e)', () => {
         it('should return user details for a valid token', async () => {
             const userDto = { email: 'test@test.com', username: 'test', password: 'test123' };
             const tokens = await authService.signup(userDto);
-            const userDetails = await authGrpcController.validateToken({ token: tokens.accessToken });
+            const responseDto = await authGrpcController.validateToken({ token: tokens.accessToken });
 
-            expect(userDetails).toHaveProperty('id');
-            expect(userDetails).toHaveProperty('username');
-            expect(userDetails.username).toBe(userDto.username);
+            expect(responseDto).toHaveProperty('valid');
+            expect(responseDto).toHaveProperty('user');
+            expect(responseDto.user.username).toBe(userDto.username);
         });
 
         it('should return null for an invalid token', async () => {
             const result = await authGrpcController.validateToken({ token: 'invalidToken' });
-            expect(result).toBeNull();
+            expect(result).toHaveProperty('valid');
+            expect(result.valid).toBe(false);
         });
     });
 });

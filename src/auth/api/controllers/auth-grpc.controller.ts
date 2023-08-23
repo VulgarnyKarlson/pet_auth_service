@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
+import { ValidateTokenRequestDto, ValidateTokenResponseDto } from 'auth/application/dtos/validateToken.dto';
 import { AuthService } from 'auth/application/services/auth.service';
-import { User } from 'auth/domain/user.entity';
 
 @Controller()
 export class AuthGrpcController {
@@ -10,15 +10,20 @@ export class AuthGrpcController {
     ) {}
 
     @GrpcMethod('AuthService', 'ValidateToken')
-    async validateToken(data: { token: string }): Promise<Pick<User, 'id'|'username'>> {
+    async validateToken(data: ValidateTokenRequestDto): Promise<ValidateTokenResponseDto> {
         const jwtDto = await this.authService.validateAuthToken(data.token);
         if (jwtDto === null) {
-            return null;
+            return {
+                valid: false,
+            }
         }
 
         return {
-            id: jwtDto.sub,
-            username: jwtDto.username,
+            valid: true,
+            user: {
+                id: jwtDto.sub,
+                username: jwtDto.username,
+            }
         };
     }
 }
